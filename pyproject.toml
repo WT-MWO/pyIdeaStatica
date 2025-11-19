@@ -1,0 +1,21 @@
+[project]
+name = "pyideastatica"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Marcin Wolinski",email = "mwo@woodthilsted.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "ideastatica-connection-api (>=25.1.0.4141,<26.0.0.0)",
+    "openpyxl (>=3.1.5,<4.0.0)"
+]
+
+[tool.poetry]
+packages = [{include = "pyideastatica", from = "src"}]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
