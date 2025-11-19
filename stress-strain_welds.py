@@ -87,13 +87,16 @@ with connection_api_service_attacher.ConnectionApiServiceAttacher(BASE_URL).crea
             lcase = weld.get("loadCase")
             jname = weld.get("joinedItemName")
             name = weld.get("name")
-            thickness = weld.get("designedThickness")
+            thickness = weld.get("thickness")
+            design_thickness = weld.get("designedThickness")
             weld_type = weld.get("weldType2")
             weld_length = weld.get("length")
             sigma_per = weld.get("sigmaPerpendicular") * 1e-6
             tau_y = weld.get("tauy") * 1e-6
             tau_x = weld.get("taux") * 1e-6
-            output.append([lcase, jname, name, thickness, weld_type, weld_length, sigma_per, tau_y, tau_x])
+            output.append(
+                [lcase, jname, name, thickness, design_thickness, weld_type, weld_length, sigma_per, tau_y, tau_x]
+            )
 
         # print(output)
 
@@ -108,6 +111,7 @@ with connection_api_service_attacher.ConnectionApiServiceAttacher(BASE_URL).crea
         "joinedItemName",
         "Name",
         "Thickness",
+        "Design thickness",
         "Weld type",
         "Weld length",
         "\u03c3_\u27c2",  # sigma_perpendicular

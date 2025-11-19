@@ -85,13 +85,14 @@ with connection_api_service_attacher.ConnectionApiServiceAttacher(BASE_URL).crea
         # Writing to the .json
         # print(weld_results)
         with open("data.json", "w") as f:
-            json.dump(fatigue_results, f)
+            json.dump(raw_results, f)
 
         # Stressess are in N/m2 (Pa) so require *1e-6
         for weld_id, weld in fatigue_results.items():
             lcase = weld.get("loadCase")
             jname = weld.get("joinedItemName")
             thickness = weld.get("designedThickness")
+            leg_size = weld.get("legSize")
             name = weld.get("name")
             weld_type = weld.get("weldType2")
             weld_length = weld.get("length")
@@ -100,7 +101,7 @@ with connection_api_service_attacher.ConnectionApiServiceAttacher(BASE_URL).crea
             sigma = weld.get("normalStress2") * 1e-6
             tau_max = weld.get("shearStress2") * 1e-6
             fatigue_output.append(
-                [lcase, jname, name, thickness, weld_type, weld_length, sigma_max, tau, tau_max, sigma]
+                [lcase, jname, name, thickness, leg_size, weld_type, weld_length, sigma_max, tau, tau_max, sigma]
             )
 
         weld_results = raw_results["fatigueWelds"]
@@ -110,6 +111,7 @@ with connection_api_service_attacher.ConnectionApiServiceAttacher(BASE_URL).crea
             jname = weld.get("joinedItemName")
             name = weld.get("name")
             thickness = weld.get("designedThickness")
+            leg_size = weld.get("legSize")
             weld_type = weld.get("weldType2")
             weld_length = weld.get("length")
             max_eq_stress = weld.get("maxEquivalentStress") * 1e-6
@@ -123,6 +125,7 @@ with connection_api_service_attacher.ConnectionApiServiceAttacher(BASE_URL).crea
                     jname,
                     name,
                     thickness,
+                    leg_size,
                     weld_type,
                     weld_length,
                     max_eq_stress,
@@ -145,7 +148,8 @@ with connection_api_service_attacher.ConnectionApiServiceAttacher(BASE_URL).crea
         "Load Case",
         "Joined Item Name",
         "Name",
-        "Thickness",
+        "Designed Thickness",
+        "Leg size",
         "Weld type",
         "Weld length",
         "Normal stress",
@@ -157,7 +161,8 @@ with connection_api_service_attacher.ConnectionApiServiceAttacher(BASE_URL).crea
         "Load Case",
         "Joined Item Name",
         "Name",
-        "Thickness",
+        "Designed Thickness",
+        "Leg size",
         "Weld type",
         "Weld length",
         "Max \u03c3_eq stress",
