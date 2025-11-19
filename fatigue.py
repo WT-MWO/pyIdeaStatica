@@ -115,7 +115,7 @@ with connection_api_service_attacher.ConnectionApiServiceAttacher(BASE_URL).crea
             weld_type = weld.get("weldType2")
             weld_length = weld.get("length")
             max_eq_stress = weld.get("maxEquivalentStress") * 1e-6
-            tau_y = weld.get("tauy")
+            tau_y = weld.get("tauy") * 1e-6
             tau_x = weld.get("taux") * 1e-6
             tau_wf_max = weld.get("tauxwf") * 1e-6
             sigma_wf = weld.get("sigmawf") * 1e-6
