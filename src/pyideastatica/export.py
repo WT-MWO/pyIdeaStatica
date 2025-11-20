@@ -103,11 +103,6 @@ def _export_weld_stress_strain(api_client, connection_name, write_json, file_nam
         raw_results = json.loads(firstConnectionResult)
         weld_results = raw_results["welds"]
 
-        if write_json:
-            # Writing to the .json
-            with open("data.json", "w") as f:
-                json.dump(raw_results, f)
-
         # Stressess are in N/m2 (Pa) so require *1e-6
         for weld_id, weld in weld_results.items():
             lcase = weld.get("loadCase")
@@ -146,7 +141,7 @@ def _export_weld_stress_strain(api_client, connection_name, write_json, file_nam
         "\u03c4_\u2225",  # tau_parallel
     ]
     output.insert(0, preamble)
-    file_name = connection1.name
+    save_name = connection1.name
 
     timestr = time.strftime("%Y-%m-%d %H:%M:%S")
     info_output = [
@@ -168,9 +163,16 @@ def _export_weld_stress_strain(api_client, connection_name, write_json, file_nam
         ws3.append(row)
     # Save the file
 
-    excel_name = f"\\{file_name}_weld_stress.xlsx"
+    excel_name = f"\\{save_name}_weld_stress.xlsx"
+    json_name = f"\\{save_name}_data.json"
     out_path = output_path + excel_name
+    json_out_path = output_path + json_name
     wb.save(out_path)
+
+    if write_json:
+        # Writing to the .json
+        with open(json_out_path, "w") as f:
+            json.dump(raw_results, f)
 
     elapsed = time.time() - start_time
     formatted = time.strftime("%H:%M:%S", time.gmtime(elapsed))
@@ -235,9 +237,6 @@ def _export_weld_stress_fatigue(api_client, connection_name, write_json, file_na
         fatigue_results = raw_results["fatigueChecks"]
         # Writing to the .json
         # print(weld_results)
-        if write_json:
-            with open("data.json", "w") as f:
-                json.dump(raw_results, f)
 
         # Stressess are in N/m2 (Pa) so require *1e-6
         for weld_id, weld in fatigue_results.items():
@@ -326,7 +325,7 @@ def _export_weld_stress_fatigue(api_client, connection_name, write_json, file_na
     fatigue_output.insert(0, preamble_fatigue)
     weld_output.insert(0, preamble_weld)
 
-    file_name = connection1.name
+    save_name = connection1.name
 
     timestr = time.strftime("%Y-%m-%d %H:%M:%S")
     info_output = [
@@ -360,9 +359,16 @@ def _export_weld_stress_fatigue(api_client, connection_name, write_json, file_na
         ws3.append(row)
 
     # Save the file
-    excel_name = f"{file_name}_fatigue_weld_stress.xlsx"
+    excel_name = f"\\{save_name}_fatigue_weld_stress.xlsx"
+    json_name = f"\\{save_name}_data.json"
     out_path = output_path + excel_name
+    json_out_path = output_path + json_name
     wb.save(out_path)
+
+    if write_json:
+        with open(json_out_path, "w") as f:
+            json.dump(raw_results, f)
+
     elapsed = time.time() - start_time
     formatted = time.strftime("%H:%M:%S", time.gmtime(elapsed))
     print(f"Export complete in {formatted} sec.")
