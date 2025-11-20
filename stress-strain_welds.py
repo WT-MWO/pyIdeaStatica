@@ -12,7 +12,7 @@ C:\Program Files\IDEA StatiCa\StatiCa 25.1\IdeaStatiCa.ConnectionRestApi.exe"""
 BASE_URL = "http://localhost:5000"  # Default, do not touch
 
 project_file_path = r"C:\Users\mwo\Downloads\P0160_ICCP_Check.ideaCon"
-
+connection_index = 1  # INPUT - WHICH CONNECTION INDEX IN FILE
 
 with connection_api_service_attacher.ConnectionApiServiceAttacher(BASE_URL).create_api_client() as api_client:
 
@@ -28,7 +28,7 @@ with connection_api_service_attacher.ConnectionApiServiceAttacher(BASE_URL).crea
     connections_in_project = api_client.connection.get_connections(project_id)
 
     # Get connection in the project
-    connection1 = connections_in_project[1]  # INPUT - WHICH CONNECTION INDEX IN FILE
+    connection1 = connections_in_project[connection_index]  # INPUT - WHICH CONNECTION INDEX IN FILE
 
     # Get all loads
     loads = api_client.load_effect.get_load_effects(project_id, connection1.id)
