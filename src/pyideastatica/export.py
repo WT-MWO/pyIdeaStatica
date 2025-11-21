@@ -51,6 +51,7 @@ def export_weld_stress(file_path, connection_name, write_json, output_path):
 def _export_weld_stress_strain(api_client, connection_name, write_json, file_name, output_path):
     """Exports weld stresses to excel, assuming stress-strain analysis."""
     start_time = time.time()
+    print("In progress...")
     project_id = api_client.project.active_project_id
 
     # Get connection in the project
@@ -65,12 +66,13 @@ def _export_weld_stress_strain(api_client, connection_name, write_json, file_nam
     output = []
 
     for n in range(no_loads):
+        start_time2 = time.time()
         loop_loads = api_client.load_effect.get_load_effects(project_id, connection1.id)
         # print("load count at the start of loop: " + str(len(loop_loads)))
         load_ef = loop_loads[n]
         current_name = load_ef.name
         # print("Processing case:.... " + str(current_name))
-        print(f"Processing case:....{current_name} ({n+1}/{no_loads})")
+        # print(f"Processing case:....{current_name} ({n+1}/{no_loads})")
         # Remove other loads than one currently considered
         for load in loop_loads:
             if load.name != current_name:
@@ -125,6 +127,9 @@ def _export_weld_stress_strain(api_client, connection_name, write_json, file_nam
         for copied_load in loads_copy:
             if copied_load.name != current_name:
                 api_client.load_effect.add_load_effect(project_id, connection1.id, con_load_effect=copied_load)
+        elapsed2 = time.time() - start_time2
+        formatted2 = time.strftime("%H:%M:%S", time.gmtime(elapsed2))
+        print(f"Case: {current_name} ({n+1}/{no_loads}) finished in {formatted2}.")
 
     print("Saving data...")
     # Preamble for output data
@@ -181,6 +186,7 @@ def _export_weld_stress_strain(api_client, connection_name, write_json, file_nam
 
 def _export_weld_stress_fatigue(api_client, connection_name, write_json, file_name, output_path):
     start_time = time.time()
+    print("In progress...")
 
     project_id = api_client.project.active_project_id
     # Get connection in the project
@@ -196,11 +202,12 @@ def _export_weld_stress_fatigue(api_client, connection_name, write_json, file_na
     weld_output = []
 
     for n in range(1, no_loads):
+        start_time2 = time.time()
         loop_loads = api_client.load_effect.get_load_effects(project_id, connection1.id)
         # print("Load cases count at the start of loop: " + str(len(loop_loads)))
         load_ef = loop_loads[n]
         current_name = load_ef.name
-        print(f"Processing case:....{current_name} ({n}/{no_loads-1})")
+        # print(f"Processing case:....{current_name} ({n}/{no_loads-1})")
         # Remove other loads than one currently considered
         for load in loop_loads:
             if load.name != current_name and load.name != "Ref_0MPa":
@@ -291,6 +298,9 @@ def _export_weld_stress_fatigue(api_client, connection_name, write_json, file_na
         for copied_load in loads_copy:
             if copied_load.name != current_name and copied_load.name != "Ref_0MPa":
                 api_client.load_effect.add_load_effect(project_id, connection1.id, con_load_effect=copied_load)
+        elapsed2 = time.time() - start_time2
+        formatted2 = time.strftime("%H:%M:%S", time.gmtime(elapsed2))
+        print(f"Case: {current_name} ({n}/{no_loads-1}) finished in {formatted2}. ")
 
     print("Saving data...")
 
