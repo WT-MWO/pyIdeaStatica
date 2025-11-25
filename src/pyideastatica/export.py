@@ -210,7 +210,7 @@ def _export_weld_stress_fatigue(api_client, connection_name, write_json, file_na
         # print(f"Processing case:....{current_name} ({n}/{no_loads-1})")
         # Remove other loads than one currently considered
         for load in loop_loads:
-            if load.name != current_name and load.name != "Ref_0MPa":
+            if load.name != current_name and load.id != 1:
                 api_client.load_effect.delete_load_effect(project_id, connection1.id, load.id)
                 # print("Deleted case: " + str(load.name))
 
@@ -296,7 +296,7 @@ def _export_weld_stress_fatigue(api_client, connection_name, write_json, file_na
 
         # Add all loads back again
         for copied_load in loads_copy:
-            if copied_load.name != current_name and copied_load.name != "Ref_0MPa":
+            if copied_load.name != current_name and copied_load.id != 1:
                 api_client.load_effect.add_load_effect(project_id, connection1.id, con_load_effect=copied_load)
         elapsed2 = time.time() - start_time2
         formatted2 = time.strftime("%H:%M:%S", time.gmtime(elapsed2))
