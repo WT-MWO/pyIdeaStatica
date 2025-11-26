@@ -27,8 +27,8 @@ output_path - pase any output folder you want Excel file to be saved
 
 # INPUTS:
 project_file_path = r"C:\Users\mwo\Downloads\P0160_ICCP_Check.ideaCon"
-connection_name = "N6005"  # Connection name
+connection_name = "N6004"  # Connection name
 output_path = r"output"  # Path to the output folder
 
 # EXECUTION CODE:
-output = export_weld_stress(project_file_path, connection_name, write_json=False, output_path=output_path)
+output = export_weld_stress(project_file_path, connection_name, write_json=True, output_path=output_path)

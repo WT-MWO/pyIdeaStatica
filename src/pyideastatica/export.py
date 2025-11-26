@@ -118,7 +118,7 @@ def _export_weld_stress_strain(api_client, connection_name, write_json, file_nam
             tau_y = weld.get("tauy") * 1e-6
             tau_x = weld.get("taux") * 1e-6
             output.append(
-                [lcase, jname, name, thickness, design_thickness, weld_type, weld_length, sigma_per, tau_y, tau_x]
+                [lcase, name, jname, thickness, design_thickness, weld_type, weld_length, sigma_per, tau_y, tau_x]
             )
 
         # print(output)
@@ -135,8 +135,8 @@ def _export_weld_stress_strain(api_client, connection_name, write_json, file_nam
     # Preamble for output data
     preamble = [
         "Load Case",
-        "joinedItemName",
-        "Name",
+        "Item",
+        "Edge",
         "Thickness",
         "Design thickness",
         "Weld type",
@@ -249,9 +249,10 @@ def _export_weld_stress_fatigue(api_client, connection_name, write_json, file_na
         for weld_id, weld in fatigue_results.items():
             lcase = weld.get("loadCase")
             jname = weld.get("joinedItemName")
+            name = weld.get("name")
             thickness = weld.get("designedThickness")
             leg_size = weld.get("legSize")
-            name = weld.get("name")
+            section = weld.get("plateName")
             weld_type = weld.get("weldType2")
             weld_length = weld.get("length")
             sigma_max = weld.get("normalStress") * 1e-6
@@ -259,7 +260,20 @@ def _export_weld_stress_fatigue(api_client, connection_name, write_json, file_na
             sigma = weld.get("normalStress2") * 1e-6
             tau_max = weld.get("shearStress2") * 1e-6
             fatigue_output.append(
-                [lcase, jname, name, thickness, leg_size, weld_type, weld_length, sigma_max, tau, tau_max, sigma]
+                [
+                    lcase,
+                    name,
+                    jname,
+                    section,
+                    thickness,
+                    leg_size,
+                    weld_type,
+                    weld_length,
+                    sigma_max,
+                    tau,
+                    tau_max,
+                    sigma,
+                ]
             )
 
         weld_results = raw_results["fatigueWelds"]
@@ -280,8 +294,8 @@ def _export_weld_stress_fatigue(api_client, connection_name, write_json, file_na
             weld_output.append(
                 [
                     lcase,
-                    jname,
                     name,
+                    jname,
                     thickness,
                     leg_size,
                     weld_type,
@@ -307,21 +321,22 @@ def _export_weld_stress_fatigue(api_client, connection_name, write_json, file_na
     # Preamble for output data
     preamble_fatigue = [
         "Load Case",
-        "Joined Item Name",
-        "Name",
+        "Item",
+        "Edge",
+        "Section",
         "Designed Thickness",
         "Leg size",
         "Weld type",
         "Weld length",
-        "Normal stress",
-        "Shear stress",
-        "Shear stress 2",
-        "Normal stress 2",
+        "\u03c3_max",  # simga max
+        "\u03c4",  # tau
+        "\u03c4_max",  # tau max
+        "\u03c3",  # sigma
     ]
     preamble_weld = [
         "Load Case",
-        "Joined Item Name",
-        "Name",
+        "Item",
+        "Edge",
         "Designed Thickness",
         "Leg size",
         "Weld type",
