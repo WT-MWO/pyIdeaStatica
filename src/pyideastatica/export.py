@@ -341,7 +341,7 @@ def _export_weld_stress_fatigue(api_client, connection_name, write_json, file_na
         "Leg size",
         "Weld type",
         "Weld length",
-        "Max \u03c3_eq stress",
+        "\u03c3_wf_max",
         "\u03c4_y",
         "\u03c4_x",
         "\u03c4_wf_max",
